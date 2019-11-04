@@ -12,9 +12,8 @@ defmodule BinaryTree do
   @doc """
   Creates and inserts a node with its value as 'data' into the tree.
   """
-  def insert(nil, value), do: new(value)
-
   @spec insert(bst_node, any) :: bst_node
+  def insert(nil, value), do: new(value)
   def insert(%{data: data, left: left, right: right}, value) do
     cond do
       value <= data ->
@@ -32,9 +31,57 @@ defmodule BinaryTree do
   def in_order(%{data: data, left: left, right: right}),
     do: in_order(left) ++ [data] ++ in_order(right)
 
-  # Derived from https://stackoverflow.com/a/55770220/2390312
+
+  @doc """
+  Returns the height of the tree.
+
+  Derived from https://stackoverflow.com/a/55770220/2390312
+  """
   def height(%{left: nil, right: nil}), do: 0
   def height(%{left: nil, right: right}), do: 1 + height(right)
   def height(%{left: left, right: nil}), do: 1 + height(left)
   def height(%{left: left, right: right}), do: 1 + max(height(left), height(right))
+
+  @doc """
+  Checks if the tree is a binary search tree
+
+  Conditions to check:
+  The `data` value of every node in a node's left subtree is less than the data value of that node.
+  The `data` value of every node in a node's right subtree is greater than the data value of that node.
+  The `data` value of every node is distinct.
+
+  Values for lower and upper obtained from:
+  http://erlang.org/doc/efficiency_guide/advanced.html
+  """
+  def is_bst(root, lower \\ -134217729, upper \\ 134217728)
+  def is_bst(nil, _lower, _upper), do: true
+  def is_bst(%{left: nil, right: nil}, _lower, _upper), do: true
+
+  def is_bst(%{data: data, left: nil, right: right}, _lower, upper) do
+    is_bst(right, data + 1, upper)
+  end
+
+  def is_bst(%{data: data, left: left, right: nil}, lower, _upper) do
+    cond do
+      # The <= condition checks for duplicates
+      data <= left[:data] ->
+        false
+
+      true ->
+        is_bst(left, lower, data - 1)
+    end
+  end
+
+  def is_bst(%{data: data, left: left, right: right}, lower, upper) do
+    cond do
+      data <= left[:data] ->
+        false
+
+      data >= right[:data] ->
+        false
+
+      true ->
+        is_bst(left, lower, data - 1) and is_bst(right, data + 1, upper)
+    end
+  end
 end

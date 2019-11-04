@@ -33,7 +33,7 @@ defmodule BinaryTreeTest do
     assert root.right.data == 5
   end
 
-  test "complex tree" do
+  test "insert into a complex tree" do
     root =
       BinaryTree.new(4)
       |> BinaryTree.insert(2)
@@ -116,5 +116,48 @@ defmodule BinaryTreeTest do
       |> BinaryTree.insert(10)
 
     assert 4 == BinaryTree.height(root)
+  end
+
+  test "tree with no leaves is binary search " do
+    root =
+      BinaryTree.new(3)
+
+    assert true == BinaryTree.is_bst(root)
+  end
+
+  test "is binary search tree complex tree" do
+    root =
+      BinaryTree.new(3)
+      |> BinaryTree.insert(2)
+      |> BinaryTree.insert(1)
+      |> BinaryTree.insert(5)
+      |> BinaryTree.insert(4)
+      |> BinaryTree.insert(6)
+
+    assert true == BinaryTree.is_bst(root)
+  end
+
+  test "tree with repeated values on the left is not a binary search tree" do
+    root =
+      BinaryTree.new(3)
+      |> BinaryTree.insert(2)
+      |> BinaryTree.insert(1)
+      |> BinaryTree.insert(5)
+      |> BinaryTree.insert(6)
+      |> BinaryTree.insert(1)
+
+    assert false == BinaryTree.is_bst(root)
+  end
+
+  test "tree with repeated values on the right is not a binary search tree" do
+    root =
+      BinaryTree.new(3)
+      |> BinaryTree.insert(2)
+      |> BinaryTree.insert(1)
+      |> BinaryTree.insert(5)
+      |> BinaryTree.insert(6)
+      |> BinaryTree.insert(6)
+
+    assert false == BinaryTree.is_bst(root)
   end
 end
