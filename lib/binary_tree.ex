@@ -14,6 +14,7 @@ defmodule BinaryTree do
   """
   @spec insert(bst_node, any) :: bst_node
   def insert(nil, value), do: new(value)
+
   def insert(%{data: data, left: left, right: right}, value) do
     cond do
       value <= data ->
@@ -30,7 +31,6 @@ defmodule BinaryTree do
 
   def in_order(%{data: data, left: left, right: right}),
     do: in_order(left) ++ [data] ++ in_order(right)
-
 
   @doc """
   Returns the height of the tree.
@@ -53,7 +53,7 @@ defmodule BinaryTree do
   Values for lower and upper obtained from:
   http://erlang.org/doc/efficiency_guide/advanced.html
   """
-  def is_bst(root, lower \\ -134217729, upper \\ 134217728)
+  def is_bst(root, lower \\ -134_217_729, upper \\ 134_217_728)
   def is_bst(nil, _lower, _upper), do: true
   def is_bst(%{left: nil, right: nil}, _lower, _upper), do: true
 
@@ -83,5 +83,21 @@ defmodule BinaryTree do
       true ->
         is_bst(left, lower, data - 1) and is_bst(right, data + 1, upper)
     end
+  end
+
+  def to_map(%{data: data, left: nil, right: nil}) do
+    %{name: data}
+  end
+
+  def to_map(%{data: data, left: left, right: nil}) do
+    Map.new([{:name, data}, {:children, [to_map(left)]}])
+  end
+
+  def to_map(%{data: data, left: nil, right: right}) do
+    Map.new([{:name, data}, {:children, [to_map(right)]}])
+  end
+
+  def to_map(%{data: data, left: left, right: right}) do
+    Map.new([{:name, data}, {:children, [to_map(left), to_map(right)]}])
   end
 end

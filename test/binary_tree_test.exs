@@ -119,8 +119,7 @@ defmodule BinaryTreeTest do
   end
 
   test "tree with no leaves is binary search " do
-    root =
-      BinaryTree.new(3)
+    root = BinaryTree.new(3)
 
     assert true == BinaryTree.is_bst(root)
   end
@@ -159,5 +158,25 @@ defmodule BinaryTreeTest do
       |> BinaryTree.insert(6)
 
     assert false == BinaryTree.is_bst(root)
+  end
+
+  test "tree to map" do
+    root = BinaryTree.new(3)
+
+    assert %{name: 3} == BinaryTree.to_map(root)
+  end
+
+  test "complex tree to map" do
+    root =
+      BinaryTree.new(3)
+      |> BinaryTree.insert(2)
+      |> BinaryTree.insert(1)
+      |> BinaryTree.insert(5)
+      |> BinaryTree.insert(6)
+
+    assert %{
+             name: 3,
+             children: [%{name: 2, children: [%{name: 1}]}, %{name: 5, children: [%{name: 6}]}]
+           } == BinaryTree.to_map(root)
   end
 end
