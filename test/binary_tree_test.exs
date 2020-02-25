@@ -14,14 +14,14 @@ defmodule BinaryTreeTest do
     assert root.left.data == 2
   end
 
-  test "inserting same number" do
-    # Allows duplicate values
+  test "rejects duplicates" do
     root =
       BinaryTree.new(4)
       |> BinaryTree.insert(4)
+      |> BinaryTree.insert(4)
 
     assert root.data == 4
-    assert root.left.data == 4
+    assert root.left == nil
   end
 
   test "inserting higher number" do
@@ -134,30 +134,6 @@ defmodule BinaryTreeTest do
       |> BinaryTree.insert(6)
 
     assert true == BinaryTree.is_bst(root)
-  end
-
-  test "tree with repeated values on the left is not a binary search tree" do
-    root =
-      BinaryTree.new(3)
-      |> BinaryTree.insert(2)
-      |> BinaryTree.insert(1)
-      |> BinaryTree.insert(5)
-      |> BinaryTree.insert(6)
-      |> BinaryTree.insert(1)
-
-    assert false == BinaryTree.is_bst(root)
-  end
-
-  test "tree with repeated values on the right is not a binary search tree" do
-    root =
-      BinaryTree.new(3)
-      |> BinaryTree.insert(2)
-      |> BinaryTree.insert(1)
-      |> BinaryTree.insert(5)
-      |> BinaryTree.insert(6)
-      |> BinaryTree.insert(6)
-
-    assert false == BinaryTree.is_bst(root)
   end
 
   test "tree to map" do

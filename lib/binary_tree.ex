@@ -15,13 +15,16 @@ defmodule BinaryTree do
   @spec insert(bst_node, any) :: bst_node
   def insert(nil, value), do: new(value)
 
-  def insert(%{data: data, left: left, right: right}, value) do
+  def insert(%{data: data, left: left, right: right} = tree, value) do
     cond do
-      value <= data ->
+      value < data ->
         %{data: data, left: insert(left, value), right: right}
 
       value > data ->
         %{data: data, left: left, right: insert(right, value)}
+
+      value == data ->
+        tree
     end
   end
 
@@ -63,8 +66,7 @@ defmodule BinaryTree do
 
   def is_bst(%{data: data, left: left, right: nil}, lower, _upper) do
     cond do
-      # The <= condition checks for duplicates
-      data <= left[:data] ->
+      data < left[:data] ->
         false
 
       true ->
@@ -74,10 +76,10 @@ defmodule BinaryTree do
 
   def is_bst(%{data: data, left: left, right: right}, lower, upper) do
     cond do
-      data <= left[:data] ->
+      data < left[:data] ->
         false
 
-      data >= right[:data] ->
+      data > right[:data] ->
         false
 
       true ->
