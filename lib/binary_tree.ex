@@ -46,6 +46,21 @@ defmodule BinaryTree do
   def height(%{left: left, right: right}), do: 1 + max(height(left), height(right))
 
   @doc """
+  Return the minimum element in the binary search tree
+  """
+  def min(nil), do: nil
+  def min(%{data: data, left: nil, right: _}), do: data
+  def min(%{data: _, left: left, right: _}), do: min(left)
+
+  @doc """
+  Return the maximum element in the binary search tree
+  """
+
+  def max(nil), do: nil
+  def max(%{data: data, left: nil, right: nil}), do: data
+  def max(%{data: _, left: _, right: right}), do: max(right)
+
+  @doc """
   Checks if the tree is a binary search tree
 
   Conditions to check:

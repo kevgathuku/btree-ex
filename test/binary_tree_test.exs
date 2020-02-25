@@ -155,4 +155,38 @@ defmodule BinaryTreeTest do
              children: [%{name: 2, children: [%{name: 1}]}, %{name: 5, children: [%{name: 6}]}]
            } == BinaryTree.to_map(root)
   end
+
+  test "finds minimum value in simple tree" do
+    root = BinaryTree.new(3)
+
+    assert 3 == BinaryTree.min(root)
+  end
+
+  test "finds minimum value in complex tree" do
+    root =
+      BinaryTree.new(3)
+      |> BinaryTree.insert(2)
+      |> BinaryTree.insert(1)
+      |> BinaryTree.insert(5)
+      |> BinaryTree.insert(6)
+
+    assert 1 == BinaryTree.min(root)
+  end
+
+  test "finds maximum value in simple tree" do
+    root = BinaryTree.new(3)
+
+    assert 3 == BinaryTree.max(root)
+  end
+
+  test "finds maximum value in complex tree" do
+    root =
+      BinaryTree.new(3)
+      |> BinaryTree.insert(2)
+      |> BinaryTree.insert(1)
+      |> BinaryTree.insert(5)
+      |> BinaryTree.insert(6)
+
+    assert 6 == BinaryTree.max(root)
+  end
 end
