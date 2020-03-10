@@ -173,13 +173,13 @@ defmodule BinaryTreeTest do
     assert 1 == BinaryTree.min(root)
   end
 
-  test "finds maximum value in simple tree" do
+  test "finds maximum value in a simple tree" do
     root = BinaryTree.new(3)
 
     assert 3 == BinaryTree.max(root)
   end
 
-  test "finds maximum value in complex tree" do
+  test "finds maximum value in a complex tree" do
     root =
       BinaryTree.new(3)
       |> BinaryTree.insert(2)
@@ -188,5 +188,37 @@ defmodule BinaryTreeTest do
       |> BinaryTree.insert(6)
 
     assert 6 == BinaryTree.max(root)
+  end
+
+  test "deletes a leaf node" do
+    root = BinaryTree.new(3)
+
+    assert root |> BinaryTree.delete(3) == nil
+  end
+
+  test "deletes a node with one child" do
+    root =
+      BinaryTree.new(2)
+      |> BinaryTree.insert(1)
+      |> BinaryTree.insert(7)
+      |> BinaryTree.insert(4)
+      |> BinaryTree.insert(8)
+      |> BinaryTree.insert(3)
+      |> BinaryTree.insert(6)
+      |> BinaryTree.insert(5)
+
+    assert root |> BinaryTree.delete(6) |> BinaryTree.in_order() == [1, 2, 3, 4, 5, 7, 8]
+  end
+
+  test "deletes from a tree with a left subtree and no right subtree" do
+    root = %{data: 6, left: %{data: 5, left: nil, right: nil}, right: nil}
+
+    assert BinaryTree.delete(root, 6) == root.left
+  end
+
+  test "deletes from a tree with a right subtree and no left subtree" do
+    root = %{data: 6, right: %{data: 5, left: nil, right: nil}, left: nil}
+
+    assert BinaryTree.delete(root, 6) == root.right
   end
 end

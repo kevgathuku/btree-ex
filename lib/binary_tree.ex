@@ -24,6 +24,7 @@ defmodule BinaryTree do
         %{data: data, left: left, right: insert(right, value)}
 
       value == data ->
+        # Ignore the data and keep the tree as is
         tree
     end
   end
@@ -59,6 +60,41 @@ defmodule BinaryTree do
   def max(nil), do: nil
   def max(%{data: data, left: nil, right: nil}), do: data
   def max(%{data: _, left: _, right: right}), do: max(right)
+
+  @doc """
+  Remove `value` from the binary tree and return the resulting tree
+  """
+
+  def delete(nil), do: nil
+
+  def delete(%{data: data, left: left, right: right} = tree, value) do
+    cond do
+      value < data ->
+        # Remove the target item from the left subtree
+        Map.replace!(tree, :left, delete(tree.left, value))
+
+      value > data ->
+        Map.replace!(tree, :right, delete(tree.right, value))
+
+      value == data ->
+        cond do
+          left == nil ->
+            # Only a right subtree, or no subtrees
+            # return the right sub-tree
+            right
+
+          right == nil ->
+            # Only a left subtree, or no subtrees
+            # return the left sub-tree
+            left
+
+          true ->
+            # successor -> min value in right subtree / max value in the left subtree
+            successor = min(right)
+            %{data: successor, left: left, right: delete(right, successor)}
+        end
+    end
+  end
 
   @doc """
   Checks if the tree is a binary search tree
